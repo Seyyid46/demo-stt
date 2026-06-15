@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#7B96B0">
+<title>dekan-it Sprachformular</title>
+<style>
+  :root{
+    --blue:#7B96B0;--blue-dark:#5E7A95;--blue-deep:#3D5468;
+    --coral:#F0916B;--coral-dark:#E07B53;--coral-soft:#FBE4DA;
+    --ink:#1C2630;--grey:#6B7785;--line:#E7EBEF;--bg:#FFFFFF;--soft:#F6F8FA;--ok:#4F9D77;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:#DDE3EA;color:var(--ink);display:flex;align-items:center;justify-content:center;min-height:100dvh;}
+  .phone{width:100%;max-width:430px;min-height:100dvh;background:var(--bg);display:flex;flex-direction:column;position:relative;overflow:hidden;}
+  @media(min-width:480px){
+    body{padding:24px;}
+    .phone{min-height:auto;height:880px;max-height:92dvh;border-radius:38px;
+      box-shadow:0 30px 70px -20px rgba(40,60,80,.45);border:1px solid #cfd6de;}
+  }
+
+  header{padding:16px 20px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;}
+  .back{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:var(--bg);
+    display:grid;place-items:center;cursor:pointer;flex-shrink:0;opacity:0;pointer-events:none;transition:opacity .2s;}
+  .back.show{opacity:1;pointer-events:auto;}
+  .back svg{width:18px;height:18px;color:var(--ink);}
+  .logo{font-size:19px;font-weight:800;letter-spacing:-.5px;color:var(--blue);flex:1;}
+  .logo span{color:var(--coral);}
+  .netbtn{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:700;cursor:pointer;
+    border:1px solid var(--line);border-radius:20px;padding:6px 11px;background:var(--bg);user-select:none;}
+  .dot{width:8px;height:8px;border-radius:50%;background:#C9CED4;transition:background .2s;}
+  .netbtn.on .dot{background:var(--ok);}
+  .netbtn .lbl{color:var(--grey);} .netbtn.on .lbl{color:var(--ok);}
+
+  .stage{flex:1;position:relative;overflow:hidden;}
+  .screen{position:absolute;inset:0;display:flex;flex-direction:column;padding:24px 20px;overflow-y:auto;
+    opacity:0;transform:translateX(14px);pointer-events:none;transition:opacity .26s ease,transform .26s ease;}
+  .screen.active{opacity:1;transform:none;pointer-events:auto;}
+
+  .eyebrow{font-size:11.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--coral);margin-bottom:7px;}
+  h1{font-size:24px;line-height:1.2;font-weight:800;letter-spacing:-.5px;margin-bottom:6px;}
+  .sub{font-size:13.5px;color:var(--grey);line-height:1.5;margin-bottom:20px;}
+  .sectlbl{font-size:11.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--grey);margin:22px 2px 11px;}
+
+  .hero-action{border:none;border-radius:20px;padding:22px 20px;background:var(--coral);color:#fff;cursor:pointer;
+    display:flex;align-items:center;gap:16px;text-align:left;width:100%;font-family:inherit;
+    box-shadow:0 14px 30px -12px rgba(240,145,107,.75);transition:transform .12s;}
+  .hero-action:active{transform:scale(.98);}
+  .hero-action .ring{width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.22);display:grid;place-items:center;flex-shrink:0;}
+  .hero-action .ring svg{width:27px;height:27px;color:#fff;}
+  .hero-action .tx b{display:block;font-size:18px;font-weight:800;}
+  .hero-action .tx small{font-size:13px;opacity:.92;}
+
+  .list{display:flex;flex-direction:column;gap:11px;}
+  .card{border:1px solid var(--line);border-radius:16px;padding:15px 16px;display:flex;align-items:center;gap:13px;
+    cursor:pointer;background:var(--bg);transition:border-color .15s,transform .1s,box-shadow .15s;}
+  .card:active{transform:scale(.99);}
+  .card.sel{border-color:var(--blue);box-shadow:0 0 0 3px rgba(123,150,176,.16);}
+  .ic{width:42px;height:42px;border-radius:12px;background:var(--soft);display:grid;place-items:center;flex-shrink:0;color:var(--blue-deep);}
+  .ic svg{width:21px;height:21px;}
+  .card .t{flex:1;min-width:0;} .card .t b{display:block;font-size:14.5px;font-weight:700;} .card .t small{color:var(--grey);font-size:12.5px;}
+  .check{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);flex-shrink:0;display:grid;place-items:center;}
+  .card.sel .check{background:var(--blue);border-color:var(--blue);}
+  .check svg{width:13px;height:13px;color:#fff;display:none;} .card.sel .check svg{display:block;}
+
+  .qitem{border:1px solid var(--line);border-radius:14px;padding:13px 15px;display:flex;align-items:center;gap:12px;margin-bottom:10px;background:var(--bg);}
+  .qitem .ic{width:38px;height:38px;}
+  .qitem .t{flex:1;min-width:0;} .qitem .t b{font-size:14px;font-weight:700;display:block;} .qitem .t small{font-size:12px;color:var(--grey);}
+  .pill{font-size:10.5px;font-weight:700;padding:4px 9px;border-radius:20px;white-space:nowrap;}
+  .pill.wait{background:var(--soft);color:var(--grey);} .pill.done{background:#E7F3ED;color:var(--ok);} .pill.up{background:var(--coral-soft);color:var(--coral-dark);}
+  .del{border:none;background:none;cursor:pointer;color:#C2C9D1;padding:4px;} .del svg{width:17px;height:17px;display:block;}
+  .empty{text-align:center;color:var(--grey);padding:22px 10px;font-size:13px;line-height:1.5;}
+
+  .foot{padding:14px 20px 22px;border-top:1px solid var(--line);background:var(--bg);}
+  .btn{width:100%;border:none;border-radius:14px;padding:15px;font-size:15.5px;font-weight:700;cursor:pointer;font-family:inherit;transition:transform .1s,opacity .15s,background .15s;}
+  .btn:active{transform:scale(.985);} .btn+.btn{margin-top:9px;}
+  .btn-primary{background:var(--blue);color:#fff;} .btn-primary:disabled{background:#C9D2DB;cursor:not-allowed;}
+  .btn-coral{background:var(--coral);color:#fff;} .btn-ghost{background:var(--bg);color:var(--blue-deep);border:1.5px solid var(--line);}
+
+  .rec-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;}
+  .chosen{font-size:13px;color:var(--grey);} .chosen b{color:var(--ink);}
+  .timer{font-size:46px;font-weight:800;letter-spacing:1px;font-variant-numeric:tabular-nums;margin:4px 0;}
+  .hint{font-size:13px;color:var(--grey);max-width:260px;line-height:1.5;}
+  .micwrap{position:relative;width:160px;height:160px;display:grid;place-items:center;margin:14px 0;}
+  .pulse{position:absolute;inset:0;border-radius:50%;background:var(--coral);opacity:0;}
+  .recording .pulse{animation:pulse 1.8s ease-out infinite;}
+  .recording .pulse.d2{animation-delay:.6s;}.recording .pulse.d3{animation-delay:1.2s;}
+  @keyframes pulse{0%{transform:scale(.62);opacity:.45;}80%{opacity:0;}100%{transform:scale(1.25);opacity:0;}}
+  .mic{width:104px;height:104px;border-radius:50%;background:var(--coral);color:#fff;border:none;display:grid;place-items:center;
+    cursor:pointer;z-index:2;box-shadow:0 12px 28px -8px rgba(240,145,107,.7);transition:transform .12s,background .2s;}
+  .mic:active{transform:scale(.95);} .mic svg{width:44px;height:44px;}
+  .recording .mic{background:var(--blue-deep);box-shadow:0 12px 28px -8px rgba(61,84,104,.6);}
+
+  .center-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:16px;}
+  .ringSpin{width:90px;height:90px;} .spin{transform-origin:center;animation:spin 1s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .big-ok{width:90px;height:90px;border-radius:50%;background:var(--coral-soft);display:grid;place-items:center;}
+  .big-ok svg{width:46px;height:46px;color:var(--coral);}
+  .step-title{font-size:19px;font-weight:800;} .step-sub{font-size:13.5px;color:var(--grey);max-width:280px;line-height:1.55;}
+  .stamp{font-size:12px;color:var(--grey);background:var(--soft);border-radius:10px;padding:8px 14px;} .stamp b{color:var(--ink);}
+  .progress{font-size:13px;color:var(--grey);}
+
+  .badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--ok);background:#E7F3ED;padding:5px 11px;border-radius:20px;margin-bottom:12px;}
+  .badge svg{width:13px;height:13px;}
+  .field{border-bottom:1px solid var(--line);padding:12px 2px;display:flex;flex-direction:column;gap:3px;}
+  .field label{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--grey);}
+  .field .val{font-size:15.5px;font-weight:600;} .field .val.em{color:#B6BEC7;font-weight:500;font-style:italic;}
+  .src{margin-top:16px;background:var(--soft);border-radius:14px;padding:13px 15px;}
+  .src small{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--grey);}
+  .src p{font-size:13px;color:var(--ink);line-height:1.55;margin-top:6px;}
+
+  .demo-tag{position:absolute;top:9px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:9.5px;
+    font-weight:700;letter-spacing:1px;padding:3px 11px;border-radius:20px;z-index:30;opacity:.85;text-transform:uppercase;}
+  .toast{position:absolute;left:20px;right:20px;bottom:90px;background:var(--ink);color:#fff;padding:13px 15px;border-radius:12px;
+    font-size:13px;display:flex;align-items:center;gap:10px;opacity:0;transform:translateY(10px);transition:.3s;z-index:25;pointer-events:none;}
+  .toast.show{opacity:1;transform:none;} .toast svg{width:16px;height:16px;flex-shrink:0;color:var(--coral);}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="demo-tag">Demo</div>
+  <header>
+    <button class="back" id="back" aria-label="Zurück"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+    <div class="logo">dekan<span>-it</span></div>
+    <div class="netbtn" id="netbtn"><span class="dot"></span><span class="lbl" id="netlbl">Offline</span></div>
+  </header>
+
+  <div class="stage">
+    <section class="screen active" id="home">
+      <div class="eyebrow">Startmenü</div>
+      <h1>Was möchtest du tun?</h1>
+      <p class="sub">Nimm vor oder nach einem Termin per Sprache auf. Alles wird gesammelt und hochgeladen, sobald du online bist.</p>
+      <button class="hero-action" id="startNew">
+        <span class="ring"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg></span>
+        <span class="tx"><b>Neue Aufnahme</b><small>Formular wählen und losreden</small></span>
+      </button>
+      <div class="sectlbl" id="qlbl">Gesammelte Aufnahmen</div>
+      <div id="queue"></div>
+    </section>
+
+    <section class="screen" id="pick">
+      <div class="eyebrow">Neue Aufnahme · Schritt 1</div>
+      <h1>Formular wählen</h1>
+      <p class="sub">Wofür ist die Aufnahme? Tippe ein Formular an.</p>
+      <div class="list" id="formlist"></div>
+    </section>
+
+    <section class="screen" id="rec">
+      <div class="eyebrow">Neue Aufnahme · Schritt 2</div>
+      <div class="rec-wrap">
+        <p class="chosen">Formular: <b id="chosenName">–</b></p>
+        <div class="timer" id="timer">00:00</div>
+        <div class="micwrap" id="micwrap">
+          <div class="pulse"></div><div class="pulse d2"></div><div class="pulse d3"></div>
+          <button class="mic" id="micbtn" aria-label="Aufnahme starten oder stoppen">
+            <svg id="micicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/></svg>
+          </button>
+        </div>
+        <p class="hint" id="rechint">Tippe auf das Mikrofon und sprich frei. Zum Beispiel: Kunde, Datum, Adresse, Projekt.</p>
+      </div>
+    </section>
+
+    <section class="screen" id="sync"><div class="center-col" id="synccol"></div></section>
+
+    <section class="screen" id="result">
+      <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Fertig erfasst</span>
+      <h1 id="resTitle">Erstgespräch</h1>
+      <p class="sub" style="margin-bottom:14px">Automatisch aus deiner Aufnahme ausgefüllt. Bitte kurz prüfen.</p>
+      <div id="fields"></div>
+      <div class="src"><small>Aus dieser Aufnahme erkannt</small><p id="transcript"></p></div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span id="toasttext"></span></div>
+  <div class="foot" id="foot"></div>
+</div>
+
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id);};
+  var forms=[
+    {id:'erst',name:'Erstgespräch',desc:'Neuer Kunde, erster Termin',icon:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/>'},
+    {id:'nach',name:'Nachbesprechung',desc:'Zusammenfassung nach dem Termin',icon:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/>'},
+    {id:'objekt',name:'Objektaufnahme',desc:'Daten zum Projekt vor Ort',icon:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>'}
+  ];
+  var samples={
+    erst:{transcript:'Erstgespräch mit Frau Petra Sander, heute den fünfzehnten Juni. Adresse Lindenweg 8 in Darmstadt. Es geht um die Sanierung der Heizungsanlage im Mehrfamilienhaus. Budgetrahmen etwa vierzigtausend Euro.',
+      fields:[['Kunde','Petra Sander'],['Datum','15.06.2026'],['Adresse','Lindenweg 8, 64283 Darmstadt'],['Projekt','Heizungssanierung Mehrfamilienhaus'],['Budgetrahmen','ca. 40.000 €'],['Telefon','',1]]},
+    nach:{transcript:'Nachbesprechung Termin Sander. Kunde möchte zwei Angebote sehen. Nächster Schritt Vor-Ort-Aufmaß in der kommenden Woche. Entscheidung bis Ende des Monats.',
+      fields:[['Kunde','Petra Sander'],['Ergebnis','Zwei Angebote gewünscht'],['Nächster Schritt','Vor-Ort-Aufmaß nächste Woche'],['Frist','30.06.2026']]},
+    objekt:{transcript:'Objektaufnahme Lindenweg 8. Baujahr neunzehnhundertzweiundachtzig, Ölheizung im Keller, sechs Wohneinheiten. Dachfläche nach Süden ausgerichtet.',
+      fields:[['Objekt','Lindenweg 8, Darmstadt'],['Baujahr','1982'],['Bestand','Ölheizung, Keller'],['Einheiten','6 Wohneinheiten'],['Ausrichtung','Dach nach Süden']]}
+  };
+
+  var st={view:'home', sel:null, online:false, recording:false, sec:0, queue:[]};
+  var timerInt=null, nid=1, history=[];
+
+  function setActive(v){['home','pick','rec','sync','result'].forEach(function(id){$(id).classList.toggle('active',id===v);});}
+  function go(v,push){ if(push!==false) history.push(st.view); st.view=v; setActive(v);
+    $('back').classList.toggle('show', v!=='home'); renderFoot(); if(v==='home') renderQueue(); }
+  function back(){ if(st.recording) return; var prev=history.pop()||'home'; st.view=prev; setActive(prev);
+    $('back').classList.toggle('show', prev!=='home'); renderFoot(); if(prev==='home') renderQueue(); }
+  $('back').onclick=back;
+
+  function toast(m){$('toasttext').textContent=m;var t=$('toast');t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2600);}
+  function fmt(s){var m=Math.floor(s/60),x=s%60;return (m<10?'0':'')+m+':'+(x<10?'0':'')+x;}
+  function formById(id){for(var i=0;i<forms.length;i++)if(forms[i].id===id)return forms[i];}
+  function waiting(){return st.queue.filter(function(q){return q.status==='wait';}).length;}
+
+  $('netbtn').onclick=function(){ st.online=!st.online;
+    $('netbtn').classList.toggle('on',st.online); $('netlbl').textContent=st.online?'Online':'Offline';
+    if(st.online&&waiting()>0) toast(waiting()+' Aufnahme(n) bereit zum Hochladen');
+    renderFoot(); if(st.view==='home') renderQueue();
+  };
+
+  $('startNew').onclick=function(){ st.sel=null;
+    document.querySelectorAll('#formlist .card').forEach(function(c){c.classList.remove('sel');}); go('pick');
+  };
+
+  forms.forEach(function(f){
+    var d=document.createElement('div'); d.className='card';
+    d.innerHTML='<div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+f.icon+'</svg></div>'+
+      '<div class="t"><b>'+f.name+'</b><small>'+f.desc+'</small></div>'+
+      '<div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>';
+    d.onclick=function(){ st.sel=f; document.querySelectorAll('#formlist .card').forEach(function(c){c.classList.remove('sel');}); d.classList.add('sel'); renderFoot(); };
+    $('formlist').appendChild(d);
+  });
+
+  function renderQueue(){
+    var box=$('queue');
+    if(st.queue.length===0){ $('qlbl').style.display='none'; box.innerHTML='<div class="empty">Noch keine Aufnahmen gesammelt.</div>'; return; }
+    $('qlbl').style.display='block'; box.innerHTML='';
+    st.queue.forEach(function(q){
+      var f=formById(q.formId);
+      var pill=q.status==='wait'?'<span class="pill wait">Wartet auf Netz</span>':q.status==='done'?'<span class="pill done">Hochgeladen</span>':'<span class="pill up">Wird übertragen…</span>';
+      var d=document.createElement('div'); d.className='qitem';
+      d.innerHTML='<div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+f.icon+'</svg></div>'+
+        '<div class="t"><b>'+f.name+'</b><small>'+q.len+' · '+q.time+'</small></div>'+pill;
+      if(q.status==='wait'){
+        var del=document.createElement('button'); del.className='del'; del.setAttribute('aria-label','Löschen');
+        del.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>';
+        del.onclick=function(e){e.stopPropagation(); st.queue=st.queue.filter(function(x){return x.id!==q.id;}); renderQueue(); renderFoot();};
+        d.appendChild(del);
+      }
+      if(q.status==='done'){ d.style.cursor='pointer'; d.onclick=function(){ fillResult(q); go('result'); }; }
+      box.appendChild(d);
+    });
+  }
+
+  $('micbtn').onclick=function(){
+    if(!st.recording){ st.recording=true; st.sec=0;
+      $('micwrap').classList.add('recording'); $('micicon').innerHTML='<rect x="6" y="6" width="12" height="12" rx="2"/>';
+      $('rechint').textContent='Aufnahme läuft. Sprich frei, tippe zum Beenden erneut.'; $('back').classList.remove('show');
+      timerInt=setInterval(function(){st.sec++;$('timer').textContent=fmt(st.sec);},1000); renderFoot();
+    } else { st.recording=false; clearInterval(timerInt);
+      $('micwrap').classList.remove('recording');
+      $('micicon').innerHTML='<path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/>';
+      $('rechint').textContent='Aufnahme bereit ('+fmt(st.sec)+'). Sichern oder neu aufnehmen.'; $('back').classList.add('show'); renderFoot();
+    }
+  };
+
+  function addToQueue(){
+    st.queue.unshift({id:nid++, formId:st.sel.id, len:fmt(st.sec||23), status:'wait',
+      time:new Date().toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})+' Uhr'});
+    st.sec=0; $('timer').textContent='00:00';
+    $('rechint').textContent='Tippe auf das Mikrofon und sprich frei. Zum Beispiel: Kunde, Datum, Adresse, Projekt.';
+  }
+
+  function runSync(){
+    var col=$('synccol'); var todo=st.queue.filter(function(q){return q.status==='wait';}); var i=0;
+    col.innerHTML='<svg class="ringSpin spin" viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" fill="none" stroke="#E7EBEF" stroke-width="5"/><circle cx="25" cy="25" r="20" fill="none" stroke="#7B96B0" stroke-width="5" stroke-linecap="round" stroke-dasharray="90 200"/></svg>'+
+      '<div class="step-title">Aufnahmen werden hochgeladen</div><div class="step-sub">Sichere Übertragung an den Büro-Server.</div><div class="progress" id="prog">0 von '+todo.length+'</div>';
+    todo.forEach(function(q){q.status='up';});
+    var step=setInterval(function(){
+      if(i<todo.length){ todo[i].status='done'; i++; var p=$('prog'); if(p)p.textContent=i+' von '+todo.length; }
+      else{ clearInterval(step);
+        col.innerHTML='<div class="big-ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>'+
+          '<div class="step-title">Sicher angekommen</div><div class="step-sub">'+todo.length+' Aufnahme(n) werden jetzt automatisch in Formulare umgewandelt.</div>'+
+          '<div class="stamp">Übertragen von <b>Berater M. K.</b> · '+new Date().toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})+' Uhr</div>';
+        renderFoot();
+      }
+    },650);
+  }
+
+  function fillResult(q){ var s=samples[q.formId], f=formById(q.formId);
+    $('resTitle').textContent=f.name; $('transcript').textContent='„'+s.transcript+'“';
+    var box=$('fields'); box.innerHTML='';
+    s.fields.forEach(function(fl){ var d=document.createElement('div'); d.className='field';
+      d.innerHTML='<label>'+fl[0]+'</label><div class="val'+(fl[1]?'':' em')+'">'+(fl[1]||'nicht genannt')+'</div>'; box.appendChild(d); });
+  }
+
+  function renderFoot(){
+    var f=$('foot'); f.innerHTML='';
+    function mk(label,cls,fn,dis){var b=document.createElement('button');b.className='btn '+cls;b.textContent=label;if(dis)b.disabled=true;else b.onclick=fn;f.appendChild(b);}
+
+    if(st.view==='home'){
+      if(waiting()>0){
+        if(st.online) mk('Jetzt hochladen ('+waiting()+')','btn-coral',function(){ go('sync'); runSync(); });
+        else mk('Zum Hochladen oben auf „Online“ tippen','btn-ghost',null,true);
+      }
+    }
+    else if(st.view==='pick'){
+      mk('Weiter zur Aufnahme','btn-primary',function(){ $('chosenName').textContent=st.sel.name; go('rec'); }, !st.sel);
+    }
+    else if(st.view==='rec'){
+      if(st.recording){ mk('Aufnahme stoppen','btn-ghost',function(){$('micbtn').click();}); }
+      else if($('timer').textContent!=='00:00'){
+        if(st.online) mk('Sichern & sofort hochladen','btn-coral',function(){ addToQueue(); history=[]; go('sync',false); runSync(); });
+        mk('Sichern & weitere Aufnahme','btn-primary',function(){ addToQueue(); toast('Aufnahme gesammelt'); st.sel=null;
+          document.querySelectorAll('#formlist .card').forEach(function(c){c.classList.remove('sel');}); history=['home']; go('pick',false); });
+        mk('Sichern & zur Übersicht','btn-ghost',function(){ addToQueue(); toast('Aufnahme gesammelt'); history=[]; go('home',false); });
+      } else { mk('Erst aufnehmen','btn-primary',null,true); }
+    }
+    else if(st.view==='sync'){
+      var done=st.queue.some(function(q){return q.status==='done';})&&!st.queue.some(function(q){return q.status==='up';});
+      if(done) mk('Zur Übersicht','btn-primary',function(){ history=[]; go('home',false); });
+    }
+    else if(st.view==='result'){
+      mk('In Excel-Datenbank speichern','btn-primary',function(){ toast('Gespeichert – Eintrag in der Kundenliste angelegt'); });
+      mk('Zur Übersicht','btn-ghost',function(){ history=[]; go('home',false); });
+    }
+  }
+
+  renderQueue(); renderFoot();
+})();
+</script>
+</body>
+</html>
