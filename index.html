@@ -36,7 +36,7 @@
   .netbtn.on .dot{background:var(--ok);} .netbtn .lbl{color:var(--grey);} .netbtn.on .lbl{color:var(--ok);}
 
   .stage{flex:1;position:relative;overflow:hidden;}
-  .screen{position:absolute;inset:0;display:flex;flex-direction:column;padding:24px 20px;overflow-y:auto;
+  .screen{position:absolute;inset:0;display:flex;flex-direction:column;padding:24px 20px;overflow-y:auto;overflow-x:hidden;
     opacity:0;transform:translateX(14px);pointer-events:none;transition:opacity .26s ease,transform .26s ease;}
   .screen.active{opacity:1;transform:none;pointer-events:auto;}
   .eyebrow{font-size:11.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--coral);margin-bottom:7px;}
@@ -64,9 +64,9 @@
   .check svg{width:13px;height:13px;color:#fff;display:none;} .card.sel .check svg{display:block;}
 
   .qitem{border:1px solid var(--line);border-radius:14px;padding:13px 15px;display:flex;align-items:center;gap:12px;margin-bottom:10px;background:var(--bg);}
-  .qitem .ic{width:38px;height:38px;}
-  .qitem .t{flex:1;min-width:0;} .qitem .t b{font-size:14px;font-weight:700;display:block;} .qitem .t small{font-size:12px;color:var(--grey);}
-  .pill{font-size:10.5px;font-weight:700;padding:4px 9px;border-radius:20px;white-space:nowrap;}
+  .qitem .ic{width:38px;height:38px;flex-shrink:0;}
+  .qitem .t{flex:1 1 auto;min-width:0;} .qitem .t b{font-size:14px;font-weight:700;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;} .qitem .t small{font-size:12px;color:var(--grey);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;}
+  .pill{font-size:10.5px;font-weight:700;padding:4px 9px;border-radius:20px;white-space:nowrap;flex:0 0 auto;width:auto;min-width:max-content;}
   .pill.wait{background:var(--soft);color:var(--grey);} .pill.up{background:var(--coral-soft);color:var(--coral-dark);}
   .pill.check{background:var(--warn-bg);color:var(--warn);} .pill.done{background:#E7F3ED;color:var(--ok);}
   .del{border:none;background:none;cursor:pointer;color:#C2C9D1;padding:4px;} .del svg{width:17px;height:17px;display:block;}
