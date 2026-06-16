@@ -11,6 +11,7 @@
     --blue:#7B96B0;--blue-dark:#5E7A95;--blue-deep:#3D5468;
     --coral:#F0916B;--coral-dark:#E07B53;--coral-soft:#FBE4DA;
     --ink:#1C2630;--grey:#6B7785;--line:#E7EBEF;--bg:#FFFFFF;--soft:#F6F8FA;--ok:#4F9D77;
+    --warn:#E8A93B;--warn-bg:#FBF1DC;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
   html,body{height:100%;}
@@ -22,7 +23,6 @@
     .phone{min-height:auto;height:880px;max-height:92dvh;border-radius:38px;
       box-shadow:0 30px 70px -20px rgba(40,60,80,.45);border:1px solid #cfd6de;}
   }
-
   header{padding:16px 20px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;}
   .back{width:34px;height:34px;border-radius:10px;border:1px solid var(--line);background:var(--bg);
     display:grid;place-items:center;cursor:pointer;flex-shrink:0;opacity:0;pointer-events:none;transition:opacity .2s;}
@@ -33,14 +33,12 @@
   .netbtn{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:700;cursor:pointer;
     border:1px solid var(--line);border-radius:20px;padding:6px 11px;background:var(--bg);user-select:none;}
   .dot{width:8px;height:8px;border-radius:50%;background:#C9CED4;transition:background .2s;}
-  .netbtn.on .dot{background:var(--ok);}
-  .netbtn .lbl{color:var(--grey);} .netbtn.on .lbl{color:var(--ok);}
+  .netbtn.on .dot{background:var(--ok);} .netbtn .lbl{color:var(--grey);} .netbtn.on .lbl{color:var(--ok);}
 
   .stage{flex:1;position:relative;overflow:hidden;}
   .screen{position:absolute;inset:0;display:flex;flex-direction:column;padding:24px 20px;overflow-y:auto;
     opacity:0;transform:translateX(14px);pointer-events:none;transition:opacity .26s ease,transform .26s ease;}
   .screen.active{opacity:1;transform:none;pointer-events:auto;}
-
   .eyebrow{font-size:11.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--coral);margin-bottom:7px;}
   h1{font-size:24px;line-height:1.2;font-weight:800;letter-spacing:-.5px;margin-bottom:6px;}
   .sub{font-size:13.5px;color:var(--grey);line-height:1.5;margin-bottom:20px;}
@@ -52,14 +50,12 @@
   .hero-action:active{transform:scale(.98);}
   .hero-action .ring{width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.22);display:grid;place-items:center;flex-shrink:0;}
   .hero-action .ring svg{width:27px;height:27px;color:#fff;}
-  .hero-action .tx b{display:block;font-size:18px;font-weight:800;}
-  .hero-action .tx small{font-size:13px;opacity:.92;}
+  .hero-action .tx b{display:block;font-size:18px;font-weight:800;} .hero-action .tx small{font-size:13px;opacity:.92;}
 
   .list{display:flex;flex-direction:column;gap:11px;}
   .card{border:1px solid var(--line);border-radius:16px;padding:15px 16px;display:flex;align-items:center;gap:13px;
     cursor:pointer;background:var(--bg);transition:border-color .15s,transform .1s,box-shadow .15s;}
-  .card:active{transform:scale(.99);}
-  .card.sel{border-color:var(--blue);box-shadow:0 0 0 3px rgba(123,150,176,.16);}
+  .card:active{transform:scale(.99);} .card.sel{border-color:var(--blue);box-shadow:0 0 0 3px rgba(123,150,176,.16);}
   .ic{width:42px;height:42px;border-radius:12px;background:var(--soft);display:grid;place-items:center;flex-shrink:0;color:var(--blue-deep);}
   .ic svg{width:21px;height:21px;}
   .card .t{flex:1;min-width:0;} .card .t b{display:block;font-size:14.5px;font-weight:700;} .card .t small{color:var(--grey);font-size:12.5px;}
@@ -71,7 +67,8 @@
   .qitem .ic{width:38px;height:38px;}
   .qitem .t{flex:1;min-width:0;} .qitem .t b{font-size:14px;font-weight:700;display:block;} .qitem .t small{font-size:12px;color:var(--grey);}
   .pill{font-size:10.5px;font-weight:700;padding:4px 9px;border-radius:20px;white-space:nowrap;}
-  .pill.wait{background:var(--soft);color:var(--grey);} .pill.done{background:#E7F3ED;color:var(--ok);} .pill.up{background:var(--coral-soft);color:var(--coral-dark);}
+  .pill.wait{background:var(--soft);color:var(--grey);} .pill.up{background:var(--coral-soft);color:var(--coral-dark);}
+  .pill.check{background:var(--warn-bg);color:var(--warn);} .pill.done{background:#E7F3ED;color:var(--ok);}
   .del{border:none;background:none;cursor:pointer;color:#C2C9D1;padding:4px;} .del svg{width:17px;height:17px;display:block;}
   .empty{text-align:center;color:var(--grey);padding:22px 10px;font-size:13px;line-height:1.5;}
 
@@ -104,14 +101,33 @@
   .stamp{font-size:12px;color:var(--grey);background:var(--soft);border-radius:10px;padding:8px 14px;} .stamp b{color:var(--ink);}
   .progress{font-size:13px;color:var(--grey);}
 
-  .badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--ok);background:#E7F3ED;padding:5px 11px;border-radius:20px;margin-bottom:12px;}
+  /* Prüf-/Korrektur-Bildschirm */
+  .badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:5px 11px;border-radius:20px;margin-bottom:12px;}
+  .badge.check{color:var(--warn);background:var(--warn-bg);} .badge.done{color:var(--ok);background:#E7F3ED;}
   .badge svg{width:13px;height:13px;}
-  .field{border-bottom:1px solid var(--line);padding:12px 2px;display:flex;flex-direction:column;gap:3px;}
+  /* Audio-Abspieler */
+  .player{display:flex;align-items:center;gap:12px;background:var(--soft);border-radius:14px;padding:12px 14px;margin-bottom:8px;}
+  .play{width:40px;height:40px;border-radius:50%;background:var(--blue);border:none;color:#fff;display:grid;place-items:center;cursor:pointer;flex-shrink:0;}
+  .play svg{width:18px;height:18px;}
+  .pbar{flex:1;height:6px;border-radius:3px;background:#D9E0E7;position:relative;overflow:hidden;}
+  .pbar i{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--blue);border-radius:3px;}
+  .ptime{font-size:12px;color:var(--grey);font-variant-numeric:tabular-nums;flex-shrink:0;}
+  .warnnote{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--warn);background:var(--warn-bg);border-radius:10px;padding:9px 12px;margin:14px 0 6px;}
+  .warnnote svg{width:15px;height:15px;flex-shrink:0;}
+
+  .field{border-bottom:1px solid var(--line);padding:12px 2px;display:flex;align-items:flex-end;gap:10px;}
+  .field .fmain{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;}
   .field label{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--grey);}
-  .field .val{font-size:15.5px;font-weight:600;} .field .val.em{color:#B6BEC7;font-weight:500;font-style:italic;}
+  .field .val{font-size:15.5px;font-weight:600;border:none;background:none;font-family:inherit;color:var(--ink);width:100%;padding:2px 0;border-bottom:1.5px solid transparent;}
+  .field .val:focus{outline:none;border-bottom-color:var(--blue);}
+  .field .val.em{color:#B6BEC7;font-weight:500;font-style:italic;}
+  .field.unsure .val{background:var(--warn-bg);border-radius:6px;padding:4px 8px;border-bottom-color:transparent;}
+  .field .edit{flex-shrink:0;color:#C2C9D1;} .field .edit svg{width:15px;height:15px;display:block;}
+  .field.unsure .edit{color:var(--warn);}
   .src{margin-top:16px;background:var(--soft);border-radius:14px;padding:13px 15px;}
   .src small{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--grey);}
-  .src p{font-size:13px;color:var(--ink);line-height:1.55;margin-top:6px;}
+  .src p{font-size:13px;color:var(--ink);line-height:1.6;margin-top:6px;}
+  .src mark{background:var(--warn-bg);color:var(--warn-dark,#B9851F);padding:0 3px;border-radius:3px;font-weight:600;}
 
   .demo-tag{position:absolute;top:9px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;font-size:9.5px;
     font-weight:700;letter-spacing:1px;padding:3px 11px;border-radius:20px;z-index:30;opacity:.85;text-transform:uppercase;}
@@ -168,11 +184,17 @@
     <section class="screen" id="sync"><div class="center-col" id="synccol"></div></section>
 
     <section class="screen" id="result">
-      <span class="badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Fertig erfasst</span>
+      <span class="badge check" id="resBadge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span id="resBadgeTxt">Bitte prüfen</span></span>
       <h1 id="resTitle">Erstgespräch</h1>
-      <p class="sub" style="margin-bottom:14px">Automatisch aus deiner Aufnahme ausgefüllt. Bitte kurz prüfen.</p>
+      <p class="sub" style="margin-bottom:14px">Automatisch aus deiner Aufnahme ausgefüllt. Bitte kurz prüfen und bei Bedarf korrigieren.</p>
+      <div class="player">
+        <button class="play" id="playbtn" aria-label="Aufnahme abspielen"><svg id="playicon" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg></button>
+        <div class="pbar"><i id="pbarfill"></i></div>
+        <span class="ptime" id="ptime">0:23</span>
+      </div>
+      <div class="warnnote" id="warnnote" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span id="warntxt"></span></div>
       <div id="fields"></div>
-      <div class="src"><small>Aus dieser Aufnahme erkannt</small><p id="transcript"></p></div>
+      <div class="src"><small>Aus deiner Aufnahme erkannt</small><p id="transcript"></p></div>
     </section>
   </div>
 
@@ -188,23 +210,43 @@
     {id:'nach',name:'Nachbesprechung',desc:'Zusammenfassung nach dem Termin',icon:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/>'},
     {id:'objekt',name:'Objektaufnahme',desc:'Daten zum Projekt vor Ort',icon:'<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>'}
   ];
+
+  // Mehrere Beispiele je Formular. unsure:true => Feld gelb markiert; mark im Transkript via [[...]]
   var samples={
-    erst:{transcript:'Erstgespräch mit Frau Petra Sander, heute den fünfzehnten Juni. Adresse Lindenweg 8 in Darmstadt. Es geht um die Sanierung der Heizungsanlage im Mehrfamilienhaus. Budgetrahmen etwa vierzigtausend Euro.',
-      fields:[['Kunde','Petra Sander'],['Datum','15.06.2026'],['Adresse','Lindenweg 8, 64283 Darmstadt'],['Projekt','Heizungssanierung Mehrfamilienhaus'],['Budgetrahmen','ca. 40.000 €'],['Telefon','',1]]},
-    nach:{transcript:'Nachbesprechung Termin Sander. Kunde möchte zwei Angebote sehen. Nächster Schritt Vor-Ort-Aufmaß in der kommenden Woche. Entscheidung bis Ende des Monats.',
-      fields:[['Kunde','Petra Sander'],['Ergebnis','Zwei Angebote gewünscht'],['Nächster Schritt','Vor-Ort-Aufmaß nächste Woche'],['Frist','30.06.2026']]},
-    objekt:{transcript:'Objektaufnahme Lindenweg 8. Baujahr neunzehnhundertzweiundachtzig, Ölheizung im Keller, sechs Wohneinheiten. Dachfläche nach Süden ausgerichtet.',
-      fields:[['Objekt','Lindenweg 8, Darmstadt'],['Baujahr','1982'],['Bestand','Ölheizung, Keller'],['Einheiten','6 Wohneinheiten'],['Ausrichtung','Dach nach Süden']]}
+    erst:[
+      {len:'0:23', transcript:'Erstgespräch mit Frau Petra Sander, heute den fünfzehnten Juni. Adresse [[Mindenweg 8]] in Darmstadt. Sanierung der Heizungsanlage im Mehrfamilienhaus. Budgetrahmen etwa vierzigtausend Euro.',
+        fields:[['Kunde','Petra Sander'],['Datum','15.06.2026'],['Adresse','Mindenweg 8, 64283 Darmstadt',1],['Projekt','Heizungssanierung Mehrfamilienhaus'],['Budgetrahmen','ca. 40.000 €'],['Telefon','']]},
+      {len:'0:19', transcript:'Erstkontakt Herr Thomas Brandt, am dritten März. Firmensitz Rosenstraße 14, Offenbach. Thema Photovoltaik auf dem Lagerdach. Telefon 0 1 5 1 zwei drei vier.',
+        fields:[['Kunde','Thomas Brandt'],['Datum','03.03.2026'],['Adresse','Rosenstraße 14, Offenbach'],['Projekt','Photovoltaik Lagerdach'],['Budgetrahmen',''],['Telefon','0151 234…']]},
+      {len:'0:27', transcript:'Erstgespräch mit der [[Hausverwaltung Köhler]], Datum zwölfter April. Objekt in der Bahnhofstraße 3 in Hanau. Es geht um den Austausch der Heizungspumpen in zwei Gebäuden.',
+        fields:[['Kunde','Hausverwaltung Köhler',1],['Datum','12.04.2026'],['Adresse','Bahnhofstraße 3, Hanau'],['Projekt','Austausch Heizungspumpen, 2 Gebäude'],['Budgetrahmen',''],['Telefon','']]}
+    ],
+    nach:[
+      {len:'0:16', transcript:'Nachbesprechung Termin Sander. Kunde möchte zwei Angebote sehen. Nächster Schritt Vor-Ort-Aufmaß kommende Woche. Entscheidung bis Ende des Monats.',
+        fields:[['Kunde','Petra Sander'],['Ergebnis','Zwei Angebote gewünscht'],['Nächster Schritt','Vor-Ort-Aufmaß nächste Woche'],['Frist','30.06.2026']]},
+      {len:'0:21', transcript:'Nachgespräch [[Brandt]]. Interesse bestätigt, will Förderung prüfen lassen. Ich schicke Unterlagen zur KfW. Rückmeldung in vierzehn Tagen erwartet.',
+        fields:[['Kunde','Brandt',1],['Ergebnis','Interesse bestätigt, Förderung prüfen'],['Nächster Schritt','KfW-Unterlagen senden'],['Frist','in 14 Tagen']]},
+      {len:'0:14', transcript:'Nachbesprechung Hausverwaltung Köhler. Angebot wurde abgelehnt, Budget zu knapp. Kein weiterer Schritt nötig. Akte schließen.',
+        fields:[['Kunde','Hausverwaltung Köhler'],['Ergebnis','Angebot abgelehnt, Budget zu knapp'],['Nächster Schritt','Akte schließen'],['Frist','—']]}
+    ],
+    objekt:[
+      {len:'0:25', transcript:'Objektaufnahme Lindenweg 8. Baujahr [[neunzehnhundertzweiundachtzig]], Ölheizung im Keller, sechs Wohneinheiten. Dachfläche nach Süden ausgerichtet.',
+        fields:[['Objekt','Lindenweg 8, Darmstadt'],['Baujahr','1982',1],['Bestand','Ölheizung, Keller'],['Einheiten','6 Wohneinheiten'],['Ausrichtung','Dach nach Süden']]},
+      {len:'0:18', transcript:'Objekt Rosenstraße 14. Flachdach circa vierhundert Quadratmeter, Statik laut Eigentümer geprüft. Netzanschluss vorhanden. Gut geeignet.',
+        fields:[['Objekt','Rosenstraße 14, Offenbach'],['Dachfläche','ca. 400 m²'],['Statik','laut Eigentümer geprüft'],['Netzanschluss','vorhanden'],['Eignung','gut geeignet']]},
+      {len:'0:22', transcript:'Aufnahme [[Bahnhofstraße 3]]. Zwei Gebäude, Baujahr neunzehnhundertfünfundneunzig, Gasheizung Bestand. Insgesamt zwölf Einheiten. Zugang über Innenhof.',
+        fields:[['Objekt','Bahnhofstraße 3, Hanau',1],['Baujahr','1995'],['Bestand','Gasheizung'],['Einheiten','12 Einheiten'],['Zugang','über Innenhof']]}
+    ]
   };
 
   var st={view:'home', sel:null, online:false, recording:false, sec:0, queue:[]};
-  var timerInt=null, nid=1, history=[];
+  var timerInt=null, nid=1, history=[], playInt=null;
 
   function setActive(v){['home','pick','rec','sync','result'].forEach(function(id){$(id).classList.toggle('active',id===v);});}
   function go(v,push){ if(push!==false) history.push(st.view); st.view=v; setActive(v);
-    $('back').classList.toggle('show', v!=='home'); renderFoot(); if(v==='home') renderQueue(); }
+    $('back').classList.toggle('show', v!=='home'); renderFoot(); if(v==='home') renderQueue(); stopPlay(); }
   function back(){ if(st.recording) return; var prev=history.pop()||'home'; st.view=prev; setActive(prev);
-    $('back').classList.toggle('show', prev!=='home'); renderFoot(); if(prev==='home') renderQueue(); }
+    $('back').classList.toggle('show', prev!=='home'); renderFoot(); if(prev==='home') renderQueue(); stopPlay(); }
   $('back').onclick=back;
 
   function toast(m){$('toasttext').textContent=m;var t=$('toast');t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2600);}
@@ -237,7 +279,10 @@
     $('qlbl').style.display='block'; box.innerHTML='';
     st.queue.forEach(function(q){
       var f=formById(q.formId);
-      var pill=q.status==='wait'?'<span class="pill wait">Wartet auf Netz</span>':q.status==='done'?'<span class="pill done">Hochgeladen</span>':'<span class="pill up">Wird übertragen…</span>';
+      var pill = q.status==='wait'?'<span class="pill wait">Wartet auf Netz</span>'
+               : q.status==='up'?'<span class="pill up">Wird übertragen…</span>'
+               : q.status==='check'?'<span class="pill check">Bitte prüfen</span>'
+               : '<span class="pill done">In Datenbank</span>';
       var d=document.createElement('div'); d.className='qitem';
       d.innerHTML='<div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+f.icon+'</svg></div>'+
         '<div class="t"><b>'+f.name+'</b><small>'+q.len+' · '+q.time+'</small></div>'+pill;
@@ -247,7 +292,7 @@
         del.onclick=function(e){e.stopPropagation(); st.queue=st.queue.filter(function(x){return x.id!==q.id;}); renderQueue(); renderFoot();};
         d.appendChild(del);
       }
-      if(q.status==='done'){ d.style.cursor='pointer'; d.onclick=function(){ fillResult(q); go('result'); }; }
+      if(q.status==='check'||q.status==='done'){ d.style.cursor='pointer'; d.onclick=function(){ openResult(q); }; }
       box.appendChild(d);
     });
   }
@@ -265,7 +310,9 @@
   };
 
   function addToQueue(){
-    st.queue.unshift({id:nid++, formId:st.sel.id, len:fmt(st.sec||23), status:'wait',
+    // Zufälliges Beispiel für diesen Formulartyp auswählen
+    var arr=samples[st.sel.id]; var ex=arr[Math.floor(Math.random()*arr.length)];
+    st.queue.unshift({id:nid++, formId:st.sel.id, len:ex.len, status:'wait', sample:ex,
       time:new Date().toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})+' Uhr'});
     st.sec=0; $('timer').textContent='00:00';
     $('rechint').textContent='Tippe auf das Mikrofon und sprich frei. Zum Beispiel: Kunde, Datum, Adresse, Projekt.';
@@ -277,22 +324,55 @@
       '<div class="step-title">Aufnahmen werden hochgeladen</div><div class="step-sub">Sichere Übertragung an den Büro-Server.</div><div class="progress" id="prog">0 von '+todo.length+'</div>';
     todo.forEach(function(q){q.status='up';});
     var step=setInterval(function(){
-      if(i<todo.length){ todo[i].status='done'; i++; var p=$('prog'); if(p)p.textContent=i+' von '+todo.length; }
+      if(i<todo.length){ todo[i].status='check'; i++; var p=$('prog'); if(p)p.textContent=i+' von '+todo.length; }
       else{ clearInterval(step);
         col.innerHTML='<div class="big-ok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>'+
-          '<div class="step-title">Sicher angekommen</div><div class="step-sub">'+todo.length+' Aufnahme(n) werden jetzt automatisch in Formulare umgewandelt.</div>'+
+          '<div class="step-title">Sicher angekommen</div><div class="step-sub">'+todo.length+' Aufnahme(n) wurden in Text umgewandelt und warten auf deine Prüfung.</div>'+
           '<div class="stamp">Übertragen von <b>Berater M. K.</b> · '+new Date().toLocaleTimeString('de-DE',{hour:'2-digit',minute:'2-digit'})+' Uhr</div>';
         renderFoot();
       }
     },650);
   }
 
-  function fillResult(q){ var s=samples[q.formId], f=formById(q.formId);
-    $('resTitle').textContent=f.name; $('transcript').textContent='„'+s.transcript+'“';
+  // ----- Prüf-/Ergebnis-Bildschirm -----
+  var curQ=null;
+  function openResult(q){ curQ=q; var s=q.sample, f=formById(q.formId);
+    $('resTitle').textContent=f.name;
+    // Transkript mit Markierungen
+    $('transcript').innerHTML='„'+s.transcript.replace(/\[\[(.+?)\]\]/g,'<mark>$1</mark>')+'“';
+    $('ptime').textContent=s.len; $('pbarfill').style.width='0%';
+    // Badge je Status
+    var done=q.status==='done';
+    $('resBadge').className='badge '+(done?'done':'check');
+    $('resBadgeTxt').textContent=done?'In Datenbank gespeichert':'Bitte prüfen';
+    // Warnhinweis wenn unsichere Felder
+    var unsureCount=s.fields.filter(function(fl){return fl[2];}).length;
+    if(unsureCount>0 && !done){ $('warnnote').style.display='flex';
+      $('warntxt').textContent=unsureCount+' Stelle(n) unsicher erkannt (gelb). Bitte gegenhören und korrigieren.'; }
+    else $('warnnote').style.display='none';
+    // Felder
     var box=$('fields'); box.innerHTML='';
-    s.fields.forEach(function(fl){ var d=document.createElement('div'); d.className='field';
-      d.innerHTML='<label>'+fl[0]+'</label><div class="val'+(fl[1]?'':' em')+'">'+(fl[1]||'nicht genannt')+'</div>'; box.appendChild(d); });
+    s.fields.forEach(function(fl,idx){
+      var d=document.createElement('div'); d.className='field'+(fl[2]&&!done?' unsure':'');
+      var val=fl[1]||''; var empty=!val;
+      d.innerHTML='<div class="fmain"><label>'+fl[0]+'</label>'+
+        '<input class="val'+(empty?' em':'')+'" value="'+(empty?'nicht genannt':val.replace(/"/g,'&quot;'))+'" '+(done?'disabled':'')+' data-i="'+idx+'"></div>'+
+        '<span class="edit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/></svg></span>';
+      var inp=d.querySelector('input');
+      inp.addEventListener('focus',function(){ if(inp.classList.contains('em')){inp.value='';inp.classList.remove('em');} d.classList.remove('unsure'); });
+      inp.addEventListener('input',function(){ s.fields[idx][1]=inp.value; s.fields[idx][2]=0; });
+      box.appendChild(d);
+    });
+    go('result');
   }
+
+  // simuliertes Abspielen
+  function stopPlay(){ if(playInt){clearInterval(playInt);playInt=null;} var pi=$('playicon'); if(pi) pi.innerHTML='<polygon points="6 4 20 12 6 20 6 4"/>'; }
+  $('playbtn').onclick=function(){
+    if(playInt){ stopPlay(); return; }
+    $('playicon').innerHTML='<rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/>';
+    var pct=0; playInt=setInterval(function(){ pct+=4; if(pct>=100){pct=100;$('pbarfill').style.width='100%';stopPlay();$('pbarfill').style.width='0%';return;} $('pbarfill').style.width=pct+'%'; },120);
+  };
 
   function renderFoot(){
     var f=$('foot'); f.innerHTML='';
@@ -317,12 +397,17 @@
       } else { mk('Erst aufnehmen','btn-primary',null,true); }
     }
     else if(st.view==='sync'){
-      var done=st.queue.some(function(q){return q.status==='done';})&&!st.queue.some(function(q){return q.status==='up';});
-      if(done) mk('Zur Übersicht','btn-primary',function(){ history=[]; go('home',false); });
+      var ready=st.queue.some(function(q){return q.status==='check';})&&!st.queue.some(function(q){return q.status==='up';});
+      if(ready) mk('Aufnahmen prüfen','btn-primary',function(){ history=[]; go('home',false); });
     }
     else if(st.view==='result'){
-      mk('In Excel-Datenbank speichern','btn-primary',function(){ toast('Gespeichert – Eintrag in der Kundenliste angelegt'); });
-      mk('Zur Übersicht','btn-ghost',function(){ history=[]; go('home',false); });
+      if(curQ && curQ.status==='check'){
+        mk('Freigeben & in Datenbank speichern','btn-primary',function(){
+          curQ.status='done'; toast('Freigegeben – Eintrag in der Kundenliste angelegt'); openResult(curQ); });
+        mk('Zurück zur Übersicht','btn-ghost',function(){ history=[]; go('home',false); });
+      } else {
+        mk('Zurück zur Übersicht','btn-primary',function(){ history=[]; go('home',false); });
+      }
     }
   }
 
